@@ -6,6 +6,7 @@ type Person = {
   id: string;
   name: string;
   year?: string;
+  gender?: 'male' | 'female';
   children?: Person[];
 };
 
@@ -17,58 +18,64 @@ const treeData: Person = {
       id: "dedavoyxoji",
       name: "Mirzaboyev Dedavoyxoji",
       year: "1877-1953",
+      gender: "male",
       children: [
         {
           id: "abduvohid",
           name: "Dedabayev Abduvohid",
           year: "1924-2010",
+          gender: "male",
           children: [
             {
               id: "malik",
               name: "Dedabayev Malik",
               year: "1959",
+              gender: "male",
               children: [
                 {
                   id: "faxriddin",
                   name: "Dedabayev Faxriddin",
                   year: "1982",
+                  gender: "male",
                   children: [
-                    { id: "muhammadyor", name: "Dedabayev Muhammadyor", year: "2005" },
-                    { id: "muhammadrosul", name: "Malikov Muhammadrosul", year: "2007" },
-                    { id: "fotima", name: "Malikova Fotima", year: "2013" }
+                    { id: "muhammadyor", name: "Dedabayev Muhammadyor", year: "2005", gender: "male" },
+                    { id: "muhammadrosul", name: "Malikov Muhammadrosul", year: "2007", gender: "male" },
+                    { id: "fotima", name: "Malikova Fotima", year: "2013", gender: "female" }
                   ]
                 },
                 {
                   id: "sharobiddin",
                   name: "Dedabayev Sharobiddin",
                   year: "1985",
+                  gender: "male",
                   children: [
-                    { id: "mubina", name: "Malikova Mubina", year: "2008" },
-                    { id: "abubakr", name: "Malikov Abubakr", year: "2013" }
+                    { id: "mubina", name: "Malikova Mubina", year: "2008", gender: "female" },
+                    { id: "abubakr", name: "Malikov Abubakr", year: "2013", gender: "male" }
                   ]
                 },
                 {
                   id: "utkurbek",
                   name: "Dedabayev Utkurbek",
                   year: "1988",
+                  gender: "male",
                   children: [
-                    { id: "zakariyo", name: "Malikov Zakariyo", year: "2013" },
-                    { id: "oyshaxon", name: "Malikova Oyshaxon", year: "2018" }
+                    { id: "zakariyo", name: "Malikov Zakariyo", year: "2013", gender: "male" },
+                    { id: "oyshaxon", name: "Malikova Oyshaxon", year: "2018", gender: "female" }
                   ]
                 },
-                { id: "abdulaziz", name: "Dedabayev Abdulaziz", year: "1993" },
-                { id: "erkinjon", name: "Dedabayev Erkinjon", year: "1995" }
+                { id: "abdulaziz", name: "Dedabayev Abdulaziz", year: "1993", gender: "male" },
+                { id: "erkinjon", name: "Dedabayev Erkinjon", year: "1995", gender: "male" }
               ]
             },
-            { id: "gani", name: "Dedabayev G'ani", year: "1961" },
-            { id: "botirjon", name: "Dedabayev Botirjon", year: "1965" },
-            { id: "rano", name: "Dedabayeva Ra'no", year: "1968" },
-            { id: "husanboy", name: "Dedabayev Husanboy", year: "1971" },
-            { id: "asila", name: "Dedabayeva Asila", year: "1975" }
+            { id: "gani", name: "Dedabayev G'ani", year: "1961", gender: "male" },
+            { id: "botirjon", name: "Dedabayev Botirjon", year: "1965", gender: "male" },
+            { id: "rano", name: "Dedabayeva Ra'no", year: "1968", gender: "female" },
+            { id: "husanboy", name: "Dedabayev Husanboy", year: "1971", gender: "male" },
+            { id: "asila", name: "Dedabayeva Asila", year: "1975", gender: "female" }
           ]
         },
-        { id: "xafisxon", name: "Dedabayev Xafisxon", year: "1929-2000" },
-        { id: "bositxon", name: "Dedabayev Bositxon", year: "1938-2023" }
+        { id: "xafisxon", name: "Dedabayev Xafisxon", year: "1929-2000", gender: "male" },
+        { id: "bositxon", name: "Dedabayev Bositxon", year: "1938-2023", gender: "male" }
       ]
     }
   ]
@@ -78,21 +85,19 @@ const TreeNode = ({
   id, 
   name, 
   year, 
-  type 
+  type,
+  gender
 }: { 
   id: string; 
   name: string; 
   year?: string; 
   type: string; 
+  gender?: 'male' | 'female';
 }) => {
-  const bgColors: Record<string, string> = {
-    root: 'bg-slate-100 border-slate-400',
-    parent: 'bg-indigo-50 border-indigo-300',
-    child: 'bg-emerald-50 border-emerald-300',
-    grandchild: 'bg-amber-50 border-amber-200',
-    greatgrandchild: 'bg-rose-50 border-rose-200',
-    greatgreatgrandchild: 'bg-cyan-50 border-cyan-200',
-    greatgreatgreatgrandchild: 'bg-fuchsia-50 border-fuchsia-200'
+  const getColors = () => {
+    if (gender === 'female') return 'bg-pink-100 border-pink-400 text-slate-900';
+    if (gender === 'male') return 'bg-blue-100 border-blue-400 text-slate-900';
+    return 'bg-slate-100 border-slate-400 text-slate-900'; // Default for the root/ajdodlar
   };
 
   return (
@@ -101,13 +106,13 @@ const TreeNode = ({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: id === 'ultimate_root' ? 0.4 : 0.1 }}
-      className={`relative flex flex-col items-center justify-center p-1 sm:p-1.5 rounded-lg border-2 z-10 w-20 sm:w-24 text-center shadow-lg transition-transform hover:scale-105 ${bgColors[type] || 'bg-white border-slate-200'}`}
+      className={`relative flex flex-col items-center justify-center p-1 sm:p-1.5 rounded-lg border-2 z-10 w-20 sm:w-24 text-center shadow-lg transition-transform hover:scale-105 ${getColors()}`}
     >
-      <div className={`font-semibold ${type === 'root' ? 'text-xs sm:text-sm' : 'text-[8px] sm:text-[9px]'} text-slate-800 leading-tight`}>
+      <div className={`font-semibold ${type === 'root' ? 'text-xs sm:text-sm' : 'text-[8px] sm:text-[9px]'} leading-tight`}>
         {name}
       </div>
       {year && year !== "Ota" && (
-        <div className="text-[7.5px] sm:text-[8px] font-mono text-slate-500 mt-1 bg-white px-1 py-0.5 rounded-full border border-slate-200 shadow-sm leading-none">
+        <div className="text-[7.5px] sm:text-[8px] font-mono mt-1 bg-white/70 px-1 py-0.5 rounded-full border border-black/10 shadow-sm leading-none">
           {year}
         </div>
       )}
@@ -133,6 +138,7 @@ const renderTree = (node: Person, level: number = 0) => {
         name={node.name} 
         year={node.year} 
         type={nodeType} 
+        gender={node.gender}
       />
     </div>
   );
